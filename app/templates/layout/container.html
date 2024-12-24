@@ -1,0 +1,31 @@
+<div class="row">
+    {% include 'layout/price-filter.html' %}
+    <div class="col-md-9 col-sm-12 bg-light mt-3">
+        <div class="row">
+            <h2 class="col-md-7 p-2">{{t.tentheloai}}</h2>
+            <div class="col-md-5 d-flex align-items-center justify-content-end">
+                <p class="p-3">Sap xep</p>
+                <select name="SortBy" id="SortBy" style="transform: translateY(-25%)" onchange="updateOrder()">
+                    <option value="manual" {% if not order or order =='manual' %} selected {% endif %}>Tuy chon</option>
+                    <option value="best-selling" {% if order =='best-sell' %} selected {% endif %}>Ban chay nhat</option>
+                    <option value="title-ascending" {% if order =='title-asc' %} selected {% endif %}>Ten A -> Z</option>
+                    <option value="title-descending" {% if order =='title-desc' %} selected {% endif %}>Ten Z -> A</option>
+                    <option value="price-ascending" {% if order =='price-asc' %} selected {% endif %}>Gia tang dan</option>
+                    <option value="price-descending" {% if order =='price-desc' %} selected {% endif %}>Gia giam dan</option>
+                    <option value="created-ascending" {% if order =='created-asc' %} selected {% endif %}>Moi nhat</option>
+                    <option value="created-descending" {% if order =='created-desc' %} selected {% endif %}>Cu nhat</option>
+                </select>
+            </div>
+        </div>
+        <div class="d-flex flex-wrap">
+                {% for s in sanpham[t.id|string] %}
+                {% include 'layout/card-item.html' %}
+                {% endfor %}
+        </div>
+        <ul class="pagination mt-1  justify-content-center">
+            {% for i  in range(pages) %}
+            <li class="page-item"><a class="page-link {% if page|int == (i+1) %}bg-primary text-white{% endif %}" href="{{url_for('trang_chu', theloai=t.id|string, page=i+1, price_range=price_range, order=order)}}">{{i+1}}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

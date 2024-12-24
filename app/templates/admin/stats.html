@@ -1,0 +1,163 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+<h1 class="text-center text-info">Thong Ke Bao Cao</h1>
+<div class="row">
+    <div class="col-md-5 col-xs-12">
+        <table class="table">
+            <tr>
+                <th>ID: </th>
+                <th>Ten san pham: </th>
+                <th>Doanh thu: </th>
+            </tr>
+            {% for s in stats %}
+            <tr>
+                <td>{{s[0]}}</td>
+                <td>{{s[1]}}</td>
+                <td>{{"{:,.0f}".format(s[2])}} VND</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="col-md-7 col-xs-12">
+        <form class="d-flex me-4" method="get" action="">
+            <input class="form-control me-2" type="text" name="kw" placeholder="Nhap ten san pham....">
+            <button class="btn btn-primary" type="submit">Tim</button>
+        </form>
+        <canvas id="myChart"></canvas>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-5 col-xs-12">
+        <table class="table">
+            <tr>
+                <th>Thang</th>
+                <th>Doanh thu</th>
+            </tr>
+            {% for s in mon_stats %}
+            <tr>
+                <td>{{s[0]}}</td>
+                <td>{{"{:,.0f}".format(s[1])}} VND</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="col-md-7 col-xs-12">
+        <form class="d-flex me-4" method="get" action="">
+            <input class="form-control me-2" type="number" name="year" placeholder="Nhap nam....">
+            <button class="btn btn-primary" type="submit">Tim</button>
+        </form>
+        <canvas id="myChart2"></canvas>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-7 col-xs-12">
+        <table class="table">
+            <tr>
+                <th>Nam</th>
+                <th>Doanh thu</th>
+            </tr>
+            {% for s in year_stats %}
+            <tr>
+                <td>{{s[0]}}</td>
+                <td>{{"{:,.0f}".format(s[1])}} VND</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="col-md-7 col-xs-12">
+        <canvas id="myChart3"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    let data=[];
+    let labels=[];
+
+    let mData=[];
+    let mLabels=[];
+
+    let yData=[];
+    let yLabels=[];
+
+    {% for s in stats %}
+    data.push({{s[2]}})
+    labels.push('{{s[1]}}')
+    {% endfor %}
+
+    {% for s in mon_stats %}
+    mData.push({{s[1]}})
+    mLabels.push({{s[0]}})
+    {% endfor %}
+
+    {% for s in year_stats %}
+    yData.push({{s[1]}})
+    yLabels.push({{s[0]}})
+    {% endfor %}
+
+    window.onload = function(){
+        const ctx = document.getElementById('myChart');
+        new Chart(ctx,{
+            type: 'bar',
+            data:{
+                labels: labels,
+                datasets: [{
+                    label: '#Doanh thu',
+                    data: data,
+                    borderwidth: 1
+                }]
+            },
+            option:{
+                scales:{
+                    y:{
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const ctx2 = document.getElementById('nyChart2');
+        new Chart(ctx2,{
+            type: 'bar',
+            data:{
+                labels: mLabels,
+                datasets: [{
+                    label: '#Doanh thu',
+                    data: mData,
+                    borderwidth: 1,
+                    backgroundColor: ['red', 'green', 'blue', 'yellow', 'black']
+                }]
+            },
+            option:{
+                scales:{
+                    y:{
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const ctx3 = document.getElementById('myChart3');
+        new Chart(ctx3,{
+        type: 'bar',
+            data:{
+                labels: yLabels,
+                datasets: [{
+                    label: '#Doanh thu',
+                    data: yData,
+                    borderwidth: 1,
+                    backgroundColor: ['red', 'green', 'blue', 'yellow', 'black']
+                }]
+            },
+            option:{
+                scales:{
+                    y:{
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}

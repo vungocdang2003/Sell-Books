@@ -1,0 +1,71 @@
+{% extends 'layout/base.html' %}
+{% block title %}Gio hang{% endblock %}
+{% block content %}
+{% if msg %}
+<div class="alert laert-info mt-3">{{msg}}</div>
+{% endif %}
+<div class="row">
+    {% if giohang.total_quantity == 0 %}
+    <h1 class="text-center text-info mt-1">Gio Hang</h1>
+    {% endif %}
+    <div class="col-md-8 col-sm-12">
+        {% if giohang.total_quantity != 0 %}
+        <h1 class="text-center text-info mt-1">Gio Hang</h1>
+        <table class="table">
+            <tr>
+                <th></th>
+                <th>Ten san pham</th>
+                <th>Don gia</th>
+                <th>Kho con lai</th>
+                <th>So luong</th>
+                <th></th>
+            </tr>
+            {% for g in giohang.values() %}
+            <tr class="align-middle" id="product{{g.sanpham_id}}">
+                <td><img src="{{g.anhbia}}" alt="" style="width: 100px; height: 100px;"></td>
+                <td>{{g.tensanpham}}</td>
+                <td>{{"{:,.0f}".format(g.gia)}} VND</td>
+                <td>{{soluongtonkho[g.sanpham_id]}}</td>
+                <td><input type="number" onblur="updateCart('{{g.sanpham_id}}', this)" value="{{g.soluong}}" class="form-control"></td>
+                <td><button class="btn btn-danger" onclick="deleteCart('{{g.sanpham_id}}', this)">&times;</button></td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div class="alert alert-info">
+            <h3>Tong tien: <span class="cart_amount">{{"{:,.0f}".format(giohang.total_amount)}}</span>VND</h3>
+            <h3>Tong so luong: <span class="cart_counter">{{giohang.total_quantity}}</span></h3>
+        </div>
+        {% endif %}
+    </div>
+    {% if giohang.total_quantity != 0 %}
+    <div class="col-md-4 col-sm-12 d-flex flex-column align-items-center justify-content-center" id="form-thong-tin">
+        <h3>Nhap thong tin don hang</h3>
+        <form action="/checkthongtin" method="post" class="p-3" id="form-thanh-toan">
+            <div class="form-group mt-2">
+                <label for="phone" style="min-width: 100px;">So dien thoai</label>
+                <input type="tel" id="phone" name="sdt" maxlength="10" pattern="\d{10}" required>
+            </div>
+            <br>
+            <div class="form-group mt-2">
+                <label for="address" style="min-width: 100px;" class="d-block">Dia chi</label>
+                <textarea id="address" name="diachi" style="min-width: 200px;" required></textarea>
+            </div>
+            <br>
+            <div class="form-group mt-2">
+                <label for="payment_method">Phuong thuc thanh toan</label>
+                <select id="payment_method" name="phuongthucthanhtoan" required>
+                    <option value="tienmat">Thanh toan tien mat</option>
+                    <option value="vnpay">Thanh toan qua VnPay</option>
+                </select>
+            </div>
+            <br>
+            <div class="text-end">
+                <button type="button" onclick="confirmBuy()" class="btn bg-danger text-white">Dat hang</button>
+            </div>
+        </form>
+    </div>
+    {% else %}
+    <div class="alert alert-info">Khong co san pham trong gio hang</div>
+    {% endif %}
+</div>
+{% endblock %}

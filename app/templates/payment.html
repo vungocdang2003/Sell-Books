@@ -1,0 +1,31 @@
+{% extends 'layout/base.html' %}
+{% block title %}Thanh toan{% endblock %}
+{% block content %}
+<h3 class="mt-4 text-center text-primary">Nhap thong tin thanh toan</h3>
+<div class="tabel-responsive">
+    <form action="{{url_for('payment')}}" id="create_form" method="post">
+        <div class="form-group mt-2">
+            <label for="order_type">Loai hang</label>
+            <select name="order_type" id="order_type" class="form-control">
+                <option value="billpayment">Thanh toan hoa don</option>
+            </select>
+        </div>
+        <div class="form-control mt-2">
+            <label for="order_id">Ma hoa don</label>
+            <input class="form-control" id="order_id" name="order_id" type="text" value="{{hoadon_id}}" readonly/>
+        </div>
+        <div class="form-control mt-2">
+            <label for="amount">So tien</label>
+            <input class="form-control" id="amount" name="amount" type="text" value="{{'{:,.of}'.format(giohang.total_amount)}}" readonly>
+        </div>
+        <div class="form-group mt-2">
+            <label for="order_des">Noi dung thanh toan</label>
+            <textarea class="form-control" cols="20" id="order_des" name="order_des" rows="2" readonly>Thanh toan hoa don: {{hoadon_id}}</textarea>
+        </div>
+        <div class="text-end mt-2">
+            <button type="submit" class="btn btn-primary bg-danger text-white">Thanh toan</button>
+        </div>
+        <div class="form-group"></div>
+    </form>
+</div>
+{% endblock %}
